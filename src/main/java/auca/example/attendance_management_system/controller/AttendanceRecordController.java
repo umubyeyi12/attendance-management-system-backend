@@ -1,0 +1,55 @@
+package auca.example.attendance_management_system.controller;
+import java.util.List;
+import java.util.UUID;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import auca.example.attendance_management_system.model.AttendanceRecord;
+import auca.example.attendance_management_system.service.AttendanceRecordService;
+
+
+@RestController
+@RequestMapping("/api/attendance-records")
+
+public class AttendanceRecordController {
+    @Autowired 
+    private AttendanceRecordService recordService;
+
+    @PostMapping("/save")
+    public ResponseEntity<?> save(@RequestBody AttendanceRecord r){
+        AttendanceRecord saved= recordService.saveRecord(r);
+            return new ResponseEntity<>("saved id:"+saved.getId(),HttpStatus.OK);
+        
+    }
+    @GetMapping("/all")
+    public List<AttendanceRecord> getAll(){
+        return recordService.getAllRecords();
+    }
+    @GetMapping ("/{id}")
+    public ResponseEntity<?> getById(@PathVariable UUID id){
+        AttendanceRecord r=recordService.getRecordById(id);
+        if(r!= null) return new ResponseEntity<>(r,HttpStatus.OK);
+        return new ResponseEntity<>("not found",HttpStatus.NOT_FOUND);
+    }
+    @DeleteMapping("/delete/{id}")
+    public String delete(@PathVariable UUID id){
+        return recordService.deleteRecord(id);
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@PathVariable UUID id,@RequestBody AttendanceRecord newInfo){
+        AttendanceRecord existing=recordService.getRecordById(id);
+        if(existing != null){
+            existing.setClassDate(newInfo.getClassDate());
+            existing.setCourseName(newInfo.getCourseName());
+            existing.setTimeSlot(newInfo.getTimeSlot());
+            existing.setStudent(newInfo.getStudent());
+            existing.setLecturer(newInfo.getLecturer());
+            recordService.saveRecord(existing);
+            return new ResponseEntity<>("Attendance record upsted",HttpStatus.OK);
+
+        }
+        return new ResponseEntity<> ("not found",HttpStatus.NOT_FOUND);
+    }
+    
+}
