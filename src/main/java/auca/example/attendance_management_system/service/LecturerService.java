@@ -26,4 +26,8 @@ public class LecturerService{
         lecturerRepo.deleteById(id);
         return "Lecturer deleted";
     }
+    //partC1
+    public List<Lecturer> getLecturersByCourse(String name){
+        return lecturerRepo.findByCourseName(name);
+    }
 }

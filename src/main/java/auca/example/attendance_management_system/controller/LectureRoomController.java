@@ -31,12 +31,12 @@ public class LectureRoomController {
         return new ResponseEntity<>("not found",HttpStatus.NOT_FOUND);
 
     }
-   @ DeleteMapping("/update/{id}")
+   @ DeleteMapping("/delete/{id}")
    public String delete(@PathVariable UUID id){
    return roomService.deleteRoom(id);
    } 
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<?> updateRoom(@PathVariable UUID id,@RequestBody LectureRoom newInfo){
         LectureRoom existing= roomService.getRoomById(id);
         if(existing != null){
@@ -48,6 +48,10 @@ public class LectureRoomController {
         }
         return new ResponseEntity<>("not found",HttpStatus.NOT_FOUND);
 
+    }
+    @GetMapping("/free")
+    public List<LectureRoom> getFree(){
+        return roomService.getFreeRooms();
     }
     
 }

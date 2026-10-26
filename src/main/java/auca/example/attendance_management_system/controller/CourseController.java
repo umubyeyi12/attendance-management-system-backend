@@ -45,5 +45,10 @@ public class CourseController {
     public String delete(@PathVariable UUID id){
         return courseService.deleteCourse(id);
     }
+    //partc3
+    @GetMapping("/unused")
+    public List<Course> getUnused(){
+        return courseService.getUnusedCourses();
+    }
     
 }

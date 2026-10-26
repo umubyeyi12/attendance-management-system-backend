@@ -25,4 +25,8 @@ public class CourseService{
         courseRepo.deleteById(id);
         return "course deleted";
     }
+    //partc3
+    public List<Course> getUnusedCourses(){
+        return courseRepo.findByUnusedCourses();
+    }
 }

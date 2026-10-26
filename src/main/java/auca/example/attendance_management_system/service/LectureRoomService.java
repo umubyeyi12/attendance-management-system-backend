@@ -26,4 +26,8 @@ public class LectureRoomService{
         roomRepo.deleteById(id);
         return "Lecture Room deleted";
     }
+    //partC2
+    public List<LectureRoom> getFreeRooms(){
+        return roomRepo.findFreeRooms();
+    }
 }

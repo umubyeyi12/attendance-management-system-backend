@@ -55,5 +55,13 @@ public class StudentController {
     public List<Student> getByLastName(@RequestParam String lastName){
         return studentService.getStudentsByLastName(lastName);
     }
-    
+    //Part C4
+    @GetMapping("/of-lecturer/{lecturerId}")
+    public ResponseEntity<?> getByLecturer(@PathVariable UUID lecturerId){
+        List<Student> list=studentService.getStudentsByLecturer(lecturerId);
+         if(list==null){
+            return new ResponseEntity<>("lecturer with that id does not exist",HttpStatus.NOT_FOUND);
+         }
+         return new ResponseEntity<>(list,HttpStatus.OK);
+    }
 }

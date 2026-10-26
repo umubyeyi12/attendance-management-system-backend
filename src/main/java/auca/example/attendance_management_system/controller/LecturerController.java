@@ -51,5 +51,9 @@ public class LecturerController {
         }
         return new ResponseEntity<>("not found",HttpStatus.NOT_FOUND);
     }
-    
+    //partC1
+    @GetMapping("/by-course")
+    public List<Lecturer> getByCourse(@RequestParam String name){
+        return lecturerService.getLecturersByCourse(name);
+    }
 }
