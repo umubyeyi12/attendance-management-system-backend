@@ -25,4 +25,8 @@ public class StudentService{
         studentRepo.deleteById(id);
         return"Student deleted";
     }
+    //PatB1
+    public List<Student> getStudentsByLastName(String lastName){
+        return studentRepo.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+    }
 }

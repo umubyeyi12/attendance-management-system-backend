@@ -1,12 +1,14 @@
 package auca.example.attendance_management_system.controller;
 import java.util.List;
 import java.util.UUID;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import auca.example.attendance_management_system.model.AttendanceRecord;
 import auca.example.attendance_management_system.service.AttendanceRecordService;
+import auca.example.attendance_management_system.model.AttendanceStatus;
 
 
 @RestController
@@ -50,6 +52,18 @@ public class AttendanceRecordController {
 
         }
         return new ResponseEntity<> ("not found",HttpStatus.NOT_FOUND);
+    }
+    //partB2
+    @GetMapping("/by-status")
+    public List<AttendanceRecord> getByStatus(@RequestParam AttendanceStatus status){
+        return recordService.getRecordsByStatus(status);
+    }
+    //partB3
+    @GetMapping("/between")
+    public List<AttendanceRecord> getBetween(@RequestParam String start,@RequestParam String end){
+        LocalDate startDate=LocalDate.parse(start);
+        LocalDate endDate=LocalDate.parse(end);
+        return recordService.getRecordsBetween(startDate,endDate);
     }
     
 }

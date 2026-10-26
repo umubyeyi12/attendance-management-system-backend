@@ -1,9 +1,10 @@
 package auca.example.attendance_management_system.service;
 import java.util.List;
 import java.util.UUID;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import auca.example.attendance_management_system.model.AttendanceStatus;
 import auca.example.attendance_management_system.model.AttendanceRecord;
 import auca.example.attendance_management_system.repository.AttendanceRecordRepository;
 
@@ -23,5 +24,13 @@ public class AttendanceRecordService{
     public String deleteRecord(UUID id){
         attendanceRepo.deleteById(id);
         return"Record deleted";
+    }
+    //partB2
+    public List<AttendanceRecord> getRecordsByStatus(AttendanceStatus status){
+        return attendanceRepo.findByStatusOrderByClassDateAsc(status);
+    }
+    //partB3
+    public List<AttendanceRecord> getRecordsBetween(LocalDate start,LocalDate end){
+        return attendanceRepo.findByClassDateBetweenOrderByClassDateAsc(start,end);
     }
 }
