@@ -13,4 +13,6 @@ public interface AttendanceRecordRepository extends JpaRepository<AttendanceReco
  List<AttendanceRecord> findByStatusOrderByClassDateAsc(AttendanceStatus status); 
  //partB3
  List<AttendanceRecord> findByClassDateBetweenOrderByClassDateAsc(LocalDate start,LocalDate end);  
+ //Part D1
+ boolean existsByLecturerIdAndClassDateAndStatusNot(UUID lecturerId,LocalDate classDate,AttendanceStatus status);
 }

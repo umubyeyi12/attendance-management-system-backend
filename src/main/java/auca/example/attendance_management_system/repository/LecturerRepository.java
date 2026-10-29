@@ -12,4 +12,6 @@ public interface LecturerRepository extends JpaRepository<Lecturer,UUID>{
     //partC1
     @Query("SELECT l FROM Lecturer l JOIN l.courses c WHERE LOWER(c.name)=Lower(:name)")
     List<Lecturer> findByCourseName(@Param("name") String name);
+    //part D4
+    boolean existsByLectureRoomIdAndIdNot(UUID lectureRoomId,UUID lecturerId);
 }

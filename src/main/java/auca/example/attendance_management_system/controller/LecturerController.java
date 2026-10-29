@@ -56,4 +56,21 @@ public class LecturerController {
     public List<Lecturer> getByCourse(@RequestParam String name){
         return lecturerService.getLecturersByCourse(name);
     }
+    //partD3
+    @PutMapping("/{lecturerId}/courses/{courseId}")
+    public ResponseEntity<?> addCourse(@PathVariable UUID lecturerId,@PathVariable UUID courseId){
+        String msg=lecturerService.addCourse(lecturerId,courseId);
+        if(msg.contains("does not exist")) return new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
+        if(msg.contains("alread has")) return new ResponseEntity<>(msg,HttpStatus.CONFLICT);
+        return new ResponseEntity<>(msg,HttpStatus.OK);
+    
+    }
+    //part D4
+    @PatchMapping("/{lecturerId}/lecture-room")
+    public ResponseEntity<?> moveLecturer(@PathVariable UUID lecturerId,@RequestParam int roomNumber){
+        String msg=lecturerService.moveLecturer(lecturerId,roomNumber);
+        if(msg.contains("does not exist")) return new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
+        if(msg.contains("taken"))  return new ResponseEntity<>(msg,HttpStatus.CONFLICT);
+        return new ResponseEntity<>(msg,HttpStatus.OK);
+    }
 }

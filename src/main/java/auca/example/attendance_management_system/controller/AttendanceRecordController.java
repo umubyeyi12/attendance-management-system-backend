@@ -18,12 +18,6 @@ public class AttendanceRecordController {
     @Autowired 
     private AttendanceRecordService recordService;
 
-    @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody AttendanceRecord r){
-        AttendanceRecord saved= recordService.saveRecord(r);
-            return new ResponseEntity<>("saved id:"+saved.getId(),HttpStatus.OK);
-        
-    }
     @GetMapping("/all")
     public List<AttendanceRecord> getAll(){
         return recordService.getAllRecords();
@@ -65,5 +59,26 @@ public class AttendanceRecordController {
         LocalDate endDate=LocalDate.parse(end);
         return recordService.getRecordsBetween(startDate,endDate);
     }
+    //part D1 
+    @PostMapping("/save")
+    public ResponseEntity<?> save(@RequestBody AttendanceRecord r){
+        String msg= recordService.saveRecord(r);
+        if(msg.equals("Attendance record date can not be in the paste")){
+            return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);//400
+        }
+        if(msg.equals("lecturer already has a class record on that date")){
+            return new ResponseEntity<>(msg,HttpStatus.CONFLICT);//409
+
+        }
+        return new ResponseEntity<>(msg,HttpStatus.CREATED);
+    }
+    //part D2
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?>updateStatus(@PathVariable UUID id,@RequestParam AttendanceStatus status){
+        String msg=recordService.updateStatus(id,status);
+        if(msg.equals("attendance record with that id does not exist")) return new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
+        if(msg.contains("can not change status")) return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(msg,HttpStatus.OK);
+     }
     
 }
