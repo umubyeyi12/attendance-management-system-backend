@@ -2,6 +2,7 @@ package auca.example.attendance_management_system.service;
 import java.util.List;
 import java.util.UUID;
 import java.time.LocalDate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import auca.example.attendance_management_system.model.AttendanceStatus;
@@ -63,5 +64,15 @@ public class AttendanceRecordService{
         r.setStatus(newStatus);
         attendanceRepo.save(r);
         return "attendance record status updated successfully";
+    }
+    //Part F1
+    public List<Object[]> getCountByStatus(){
+        return attendanceRepo.countRecordsByStatus();
+    }
+    //Part F2
+    @Transactional
+    public String cancelDay(UUID lecturerId,LocalDate date){
+        int count= attendanceRepo.markAbsentForLecturer(lecturerId,date);
+        return count+ "attendance records cancelled";
     }
 }

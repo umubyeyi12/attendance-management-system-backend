@@ -89,5 +89,15 @@ public class AttendanceRecordController {
         recordService.deleteRecord(id);
         return new ResponseEntity<>("Deleted",HttpStatus.OK);
      }
+     //Part F1
+     @GetMapping("/stats/by-status")
+     public List<Object[]> getStatsByStatus(){
+        return recordService.getCountByStatus();
+     }
+     @PatchMapping("/cancel-day")
+     public String cancelDay(@RequestParam UUID lecturerId,@RequestParam String date){
+        return recordService.cancelDay(lecturerId,LocalDate.parse(date));
+     }
+
     
 }
