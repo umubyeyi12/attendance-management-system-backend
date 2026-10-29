@@ -41,7 +41,7 @@ public class LecturerService{
     //partD3
     public String addCourse(UUID lecturerId,UUID courseId){
         Lecturer l=lecturerRepo.findById(lecturerId).orElse(null);
-        if(l==null) return ("lecturer with that id does not exist");
+        if(l==null) return (" lecturer with that id does not exist");
         Course c=courseRepo.findById(courseId).orElse(null);
         if(c== null) return"that  course does not exist";
         if(l.getCourses().contains(c)) return "lecturer already has that course";

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import auca.example.attendance_management_system.model.AttendanceRecord;
 import auca.example.attendance_management_system.service.AttendanceRecordService;
 import auca.example.attendance_management_system.model.AttendanceStatus;
+import auca.example.attendance_management_system.repository.ParticipationMarkRepository;
 
 
 @RestController
@@ -17,6 +18,8 @@ import auca.example.attendance_management_system.model.AttendanceStatus;
 public class AttendanceRecordController {
     @Autowired 
     private AttendanceRecordService recordService;
+    @Autowired 
+    private ParticipationMarkRepository markRepo;
 
     @GetMapping("/all")
     public List<AttendanceRecord> getAll(){
@@ -27,10 +30,7 @@ public class AttendanceRecordController {
         AttendanceRecord r=recordService.getRecordById(id);
         if(r!= null) return new ResponseEntity<>(r,HttpStatus.OK);
         return new ResponseEntity<>("not found",HttpStatus.NOT_FOUND);
-    }
-    @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable UUID id){
-        return recordService.deleteRecord(id);
+   
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update(@PathVariable UUID id,@RequestBody AttendanceRecord newInfo){
@@ -63,7 +63,7 @@ public class AttendanceRecordController {
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody AttendanceRecord r){
         String msg= recordService.saveRecord(r);
-        if(msg.equals("Attendance record date can not be in the paste")){
+        if(msg.equals("Attendance record date cannot be in the past")){
             return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);//400
         }
         if(msg.equals("lecturer already has a class record on that date")){
@@ -76,9 +76,18 @@ public class AttendanceRecordController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<?>updateStatus(@PathVariable UUID id,@RequestParam AttendanceStatus status){
         String msg=recordService.updateStatus(id,status);
-        if(msg.equals("attendance record with that id does not exist")) return new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
-        if(msg.contains("can not change status")) return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
+        if(msg.equals(" The attendance record with that id does not exist")) return new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
+        if(msg.contains("cannot change status")) return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(msg,HttpStatus.OK);
+     }
+     //Part E3
+     @DeleteMapping("/delete/{id}")
+     public ResponseEntity<?> delete(@PathVariable UUID id){
+        if(markRepo.existsByAttendanceRecordId(id)){
+            return new ResponseEntity<>("That attendance record  has participation marks, delete them first",HttpStatus.CONFLICT);
+        }
+        recordService.deleteRecord(id);
+        return new ResponseEntity<>("Deleted",HttpStatus.OK);
      }
     
 }
