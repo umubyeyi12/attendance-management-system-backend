@@ -80,7 +80,7 @@ public class AttendanceRecordController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<?>updateStatus(@PathVariable UUID id,@RequestParam AttendanceStatus status){
         String msg=recordService.updateStatus(id,status);
-        if(msg.equals(" The attendance record with that id does not exist")) return new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
+        if(msg.equals("The attendance record with that id does not exist")) return new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
         if(msg.contains("Cannot change status")) return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(msg,HttpStatus.OK);
      }

@@ -57,7 +57,7 @@ public class LecturerService{
         LectureRoom r=roomRepo.findByRoomNumber(roomNumber).orElse(null);
         if(r== null) return "The lecture room with that roomNumber does not exist";
         if(lecturerRepo.existsByLectureRoomIdAndIdNot(r.getId(),lecturerId)){
-            return "That lecture room is taken by another lecture";
+            return "That lecturer room is taken by another lecture";
 
         }
         l.setLectureRoom(r);

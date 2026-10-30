@@ -54,14 +54,14 @@ public class AttendanceRecordService{
     //partD2
     public String updateStatus(UUID id,AttendanceStatus newStatus){
         AttendanceRecord r =attendanceRepo.findById(id).orElse(null);
-        if(r==null) return " The attendance record with that id does not exist";
+        if(r==null) return "The attendance record with that id does not exist";
         AttendanceStatus current=r.getStatus();
         boolean allowed =false;
 
         if(current==AttendanceStatus.EXPECTED && (newStatus==AttendanceStatus.PRESENT || newStatus==AttendanceStatus.ABSENT))allowed=true;
         if(current==AttendanceStatus.PRESENT &&(newStatus==AttendanceStatus.VERIFIED || newStatus==AttendanceStatus.ABSENT))allowed=true;
         if(!allowed){
-            return " Cannot change status from" + current + "to"+ newStatus;
+            return " Cannot change status from" + current + " to "+ newStatus;
         }
         r.setStatus(newStatus);
         attendanceRepo.save(r);
