@@ -41,27 +41,27 @@ public class LecturerService{
     //partD3
     public String addCourse(UUID lecturerId,UUID courseId){
         Lecturer l=lecturerRepo.findById(lecturerId).orElse(null);
-        if(l==null) return (" lecturer with that id does not exist");
+        if(l==null) return ("The lecturer with that id does not exist");
         Course c=courseRepo.findById(courseId).orElse(null);
-        if(c== null) return"that  course does not exist";
-        if(l.getCourses().contains(c)) return "lecturer already has that course";
+        if(c== null) return"That course does not exist";
+        if(l.getCourses().contains(c)) return "The lecturer already has that course";
         l.getCourses().add(c);
         lecturerRepo.save(l);
-        return"course added to the lecturer";
+        return"Course added to the lecturer";
     }
     //part D4
     public String moveLecturer(UUID lecturerId,int roomNumber){
         Lecturer l=lecturerRepo.findById(lecturerId).orElse(null);
-        if(l==null) return "the lecturer with that id does not exist";
+        if(l==null) return "The lecturer with that id does not exist";
 
         LectureRoom r=roomRepo.findByRoomNumber(roomNumber).orElse(null);
-        if(r== null) return "lecture room with that roomNumber does not exist";
+        if(r== null) return "The lecture room with that roomNumber does not exist";
         if(lecturerRepo.existsByLectureRoomIdAndIdNot(r.getId(),lecturerId)){
-            return "lecture room is taken by another lecture";
+            return "That lecture room is taken by another lecture";
 
         }
         l.setLectureRoom(r);
         lecturerRepo.save(l);
-        return"lecture room changed  successfully";
+        return"Lecture room changed  successfully";
     }
 }

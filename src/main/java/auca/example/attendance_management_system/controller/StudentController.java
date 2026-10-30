@@ -60,7 +60,7 @@ public class StudentController {
     public ResponseEntity<?> getByLecturer(@PathVariable UUID lecturerId){
         List<Student> list=studentService.getStudentsByLecturer(lecturerId);
          if(list==null){
-            return new ResponseEntity<>("lecturer with that id does not exist",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("The lecturer with that id does not exist",HttpStatus.NOT_FOUND);
          }
          return new ResponseEntity<>(list,HttpStatus.OK);
     }

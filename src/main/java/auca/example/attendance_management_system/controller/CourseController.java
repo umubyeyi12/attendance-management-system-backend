@@ -18,8 +18,8 @@ public class CourseController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Course c){
-        Course saved=courseService.saveCourse(c);
-        return new ResponseEntity<>("saved id:"+saved.getId(),HttpStatus.OK);
+        courseService.saveCourse(c);
+        return new ResponseEntity<>("Course saved successfully",HttpStatus.CREATED);
     }
     @GetMapping("/all")
     public List<Course> getAll(){
@@ -29,7 +29,7 @@ public class CourseController {
     public ResponseEntity<?> getById(@PathVariable UUID id){
         Course c=courseService.getCourseById(id);
         if(c!= null) return new ResponseEntity<>(c,HttpStatus.OK);
-        return new ResponseEntity<>("not found",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("The course with that id does not exist",HttpStatus.NOT_FOUND);
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateCourse(@PathVariable UUID id,@RequestBody Course newInfo){
@@ -37,13 +37,18 @@ public class CourseController {
         if(existing != null){
             existing.setName(newInfo.getName());
             courseService.saveCourse(existing);
-            return new ResponseEntity<>("course updated",HttpStatus.OK);
+            return new ResponseEntity<>("course updated successfully",HttpStatus.OK);
         }
-        return new ResponseEntity<>("not found",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("The course with that id does not exist",HttpStatus.NOT_FOUND);
     }
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable UUID id){
-        return courseService.deleteCourse(id);
+    public ResponseEntity<?> delete(@PathVariable UUID id){
+        Course existing=courseService.getCourseById(id);
+        if(existing !=null){
+            courseService.deleteCourse(id);
+            return new ResponseEntity<>("Course deleted successfully",HttpStatus.OK);
+      }
+        return new ResponseEntity<>(" The course with that id does not exist",HttpStatus.NOT_FOUND);
     }
     //partc3
     @GetMapping("/unused")

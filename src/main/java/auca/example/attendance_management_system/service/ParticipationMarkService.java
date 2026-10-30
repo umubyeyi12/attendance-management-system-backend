@@ -22,7 +22,7 @@ public class ParticipationMarkService {
   public String saveMark(UUID attendanceRecordId, ParticipationMark p){
     AttendanceRecord r=recordRepo.findById(attendanceRecordId).orElse(null);
     if(r==null) return "The attendance record with that id does not exist";
-    if(r.getStatus() !=AttendanceStatus.VERIFIED) return"Participation marks are only for Verified attendance records";
+    if(r.getStatus() !=AttendanceStatus.VERIFIED) return"Participation marks are only for VERIFIED attendance records";
     
     p.setAwardedDate(LocalDate.now());
     p.setAttendanceRecord(r);
@@ -39,9 +39,9 @@ public class ParticipationMarkService {
  //Part E3
  public String deleteMark(UUID id){
     ParticipationMark p=markRepo.findById(id).orElse(null);
-    if(p==null) return"The participation mark with that id does not exist";
+    if(p==null) return "The participation mark with that id does not exist";
     markRepo.delete(p);
-    return "Participation mark deleted succcessfully";
+    return "Participation mark deleted successfully";
  }
 
 }

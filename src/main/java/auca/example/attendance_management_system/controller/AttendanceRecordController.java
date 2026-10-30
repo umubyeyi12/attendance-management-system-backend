@@ -10,6 +10,10 @@ import auca.example.attendance_management_system.model.AttendanceRecord;
 import auca.example.attendance_management_system.service.AttendanceRecordService;
 import auca.example.attendance_management_system.model.AttendanceStatus;
 import auca.example.attendance_management_system.repository.ParticipationMarkRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 
 @RestController
@@ -66,7 +70,7 @@ public class AttendanceRecordController {
         if(msg.equals("Attendance record date cannot be in the past")){
             return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);//400
         }
-        if(msg.equals("lecturer already has a class record on that date")){
+        if(msg.equals("Lecturer already has a class record on that date")){
             return new ResponseEntity<>(msg,HttpStatus.CONFLICT);//409
 
         }
@@ -77,14 +81,14 @@ public class AttendanceRecordController {
     public ResponseEntity<?>updateStatus(@PathVariable UUID id,@RequestParam AttendanceStatus status){
         String msg=recordService.updateStatus(id,status);
         if(msg.equals(" The attendance record with that id does not exist")) return new ResponseEntity<>(msg,HttpStatus.NOT_FOUND);
-        if(msg.contains("cannot change status")) return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
+        if(msg.contains("Cannot change status")) return new ResponseEntity<>(msg,HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(msg,HttpStatus.OK);
      }
      //Part E3
      @DeleteMapping("/delete/{id}")
      public ResponseEntity<?> delete(@PathVariable UUID id){
         if(markRepo.existsByAttendanceRecordId(id)){
-            return new ResponseEntity<>("That attendance record  has participation marks, delete them first",HttpStatus.CONFLICT);
+            return new ResponseEntity<>("That attendance record has participation marks, delete them first",HttpStatus.CONFLICT);
         }
         recordService.deleteRecord(id);
         return new ResponseEntity<>("Deleted",HttpStatus.OK);
@@ -98,6 +102,17 @@ public class AttendanceRecordController {
      public String cancelDay(@RequestParam UUID lecturerId,@RequestParam String date){
         return recordService.cancelDay(lecturerId,LocalDate.parse(date));
      }
+     //Bonus 2
+     @GetMapping("/page")
+     public Page<AttendanceRecord> getPage(
+        @RequestParam int page,
+        @RequestParam int size,
+        @RequestParam String sort){
+            String[] parts= sort.split(",");
+            Pageable pageable=PageRequest.of(page,size,Sort.by(Sort.Direction.fromString(parts[1]),parts[0]));
+             return recordService.getAllRecords(pageable);
+        }
+     
 
     
 }
